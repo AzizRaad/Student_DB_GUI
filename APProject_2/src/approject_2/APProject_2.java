@@ -10,8 +10,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,20 +20,13 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -60,6 +51,7 @@ public class APProject_2 extends Application {
     GridPane gp = new GridPane();
     double defaultSliderValue = 0.0;
     String result = "0.0";
+    static boolean isSearched = false;
     static ObservableList<Student> students = FXCollections.observableArrayList();
 
     @Override
@@ -79,7 +71,6 @@ public class APProject_2 extends Application {
         hb1.setAlignment(Pos.CENTER);
 
         gp.setAlignment(Pos.CENTER);
-//        gp.setGridLinesVisible(true);
         gp.setVgap(25);
         gp.setHgap(25);
 
@@ -210,18 +201,26 @@ public class APProject_2 extends Application {
         tableView.getColumns().add(column2);
         tableView.getColumns().add(column3);
         tableView.getColumns().add(column4);
-
+        
         tb2.setOnSelectionChanged(e -> {                         /////////////////////////////// EDIT ME !!!!!!!!!!!!!!!!!!!
-            Methods.passName(input);
+            if (isSearched && tb2.isSelected()) {
+                input = search.getText();
+                Methods.passName(input);
+                clear();
+            }
+            addMessage.setText("");
         });
 
         searchBtn.setOnAction(e -> {
             input = search.getText();
             Methods.passName(input);
+            clear();
         });
 
         refreshBtn.setOnAction(e -> {
-            Methods.passName(input);
+            search.setText("");
+            Methods.passName("");
+            clear();
         });
 
         exitBtn2.setOnAction(e -> {

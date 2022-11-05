@@ -11,20 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Properties;
-import java.util.Scanner;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import static approject_2.APProject_2.students;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -83,7 +76,11 @@ public class Methods {
                 students.add(new Student(searchResult.getInt(1), searchResult.getString(2), searchResult.getString(3), searchResult.getDouble(4)));
             }
             searchMessage.setTextFill(Color.GREEN);
-            searchMessage.setText("Records with name: "+fullName);
+            if (fullName.equals("")) {
+                searchMessage.setText("show all records");
+            } else {
+                searchMessage.setText("Records with name: " + fullName);
+            }
         } else {
             searchMessage.setTextFill(Color.RED);
             searchMessage.setText("there was no record with the given name " + fullName);
@@ -103,7 +100,7 @@ public class Methods {
             if (name.length() > 40 || name.length() < 3) {//checks what error the user madde
                 addMessage.setText("your name should be 3 to 40 characters!!");
             } else {
-                addMessage.setText("please just enter characters not numbers!!");
+                addMessage.setText("please just enter english characters only!!");
             }
             return false;
         }
@@ -130,17 +127,19 @@ public class Methods {
         }
         return true;
     }// end of readGPA method
-    
-    public static void passName(String x){
+
+    public static void passName(String input) {
         try {
-                search(x);
-            } catch (SQLException ex) {
-                searchMessage.setTextFill(Color.RED);
-                searchMessage.setText("there is something wrong with the database connection");
-            } catch (IOException ex) {
-                searchMessage.setTextFill(Color.RED);
-                searchMessage.setText("there is something wrong with the 'config.properties' file");
-            }
+            search(input);
+            APProject_2.isSearched = true;
+
+        } catch (SQLException ex) {
+            searchMessage.setTextFill(Color.RED);
+            searchMessage.setText("there is something wrong with the database connection");
+        } catch (IOException ex) {
+            searchMessage.setTextFill(Color.RED);
+            searchMessage.setText("there is something wrong with the 'config.properties' file");
+        }
     }
-    
+
 }
