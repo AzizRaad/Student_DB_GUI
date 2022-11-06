@@ -6,6 +6,7 @@
 package approject_2;
 
 import java.io.IOException;
+import static java.lang.Double.MAX_VALUE;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -46,7 +47,7 @@ public class APProject_2 extends Application {
     String input = "";
     Slider slider;
     TextField nameTxtField = new TextField();
-    DatePicker d = new DatePicker();
+    static DatePicker d = new DatePicker();
     static Label addMessage;
     static Label searchMessage;
     GridPane gp = new GridPane();
@@ -161,7 +162,7 @@ public class APProject_2 extends Application {
         gp.add(date, 0, 1);
         gp.add(d, 1, 1);
         gp.add(gpa, 0, 2);
-        gp.add(slider, 1, 2);
+        gp.add(slider, 1, 2);   
         vb1.getChildren().add(gp);
         vb1.getChildren().add(sliderValue);
         vb1.getChildren().add(addMessage);
@@ -223,7 +224,7 @@ public class APProject_2 extends Application {
             }
             addMessage.setText("");
         });
-
+        
         searchBtn.setOnAction(e -> {
             input = search.getText();
             Methods.passName(input);
@@ -277,19 +278,18 @@ public class APProject_2 extends Application {
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(500);
 
-    }
+    }// end of start method
 
     public void clear() {
         nameTxtField.setText("");
         d.setValue(null);
         slider.setValue(0.0);
-    }
+    }// end of clear method 
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-}
+    }// end of main method
+}// end of class

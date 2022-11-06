@@ -5,6 +5,8 @@
  */
 package approject_2;
 
+import static approject_2.APProject_2.d;
+import static approject_2.APProject_2.isSearched;
 import static approject_2.APProject_2.addMessage;
 import static approject_2.APProject_2.searchMessage;
 import java.io.FileInputStream;
@@ -18,6 +20,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 import javafx.scene.paint.Color;
 import static approject_2.APProject_2.students;
+import java.time.LocalDate;
 
 /**
  *
@@ -79,6 +82,11 @@ public class Methods {
             addMessage.setText("please enter a valid date!!");
             return false;
         }
+        else if (d.getValue().isAfter(LocalDate.now())){
+            addMessage.setTextFill(Color.RED);
+            addMessage.setText("Cannot add future date");
+            return false;
+        }else
         return true;
     }// end of checkDate method
 
@@ -96,7 +104,10 @@ public class Methods {
         // handling not found records exception
         if (searchResult.isBeforeFirst()) { //checks if there is records returned
             while (searchResult.next()) {
-                students.add(new Student(searchResult.getInt(1), searchResult.getString(2), searchResult.getString(3), searchResult.getDouble(4)));
+                students.add(new Student(searchResult.getInt(1), 
+                        searchResult.getString(2),
+                        searchResult.getString(3), 
+                        searchResult.getDouble(4)));
             }
             searchMessage.setTextFill(Color.GREEN);
             if (fullName.equals("")) {
@@ -117,7 +128,7 @@ public class Methods {
     public static void passName(String input) {
         try {
             search(input);
-            APProject_2.isSearched = true;
+            isSearched = true;
 
         } catch (SQLException ex) {
             searchMessage.setTextFill(Color.RED);
