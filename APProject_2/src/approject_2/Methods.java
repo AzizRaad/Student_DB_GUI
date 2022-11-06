@@ -36,7 +36,7 @@ public class Methods {
 
     public static boolean add(String fullName, String date, String gpa) throws SQLException, IOException {
 
-        if (checkName(fullName) && checkDate(date) && readGPA(gpa)) {
+        if (checkName(fullName) && checkDate(date)) {
             // cunstructing the query and connect to the database
             String insertquery = "insert into StudentsTBL_abdulaziz_abdulaziz(FullName,DateOfBirth,GPA) values(?,?,?)";
             Connection connection = getConnection();
@@ -51,13 +51,36 @@ public class Methods {
             // closing the opened connections
             statement.close();
             connection.close();
-
             return true;
         } else {
             return false;
         }
+    }// end of add method
+    
+    public static boolean checkName(String name) {
+        // constructin the regular expression to check the format and valditiy of the input with it
+        String Name_Pattern = "[A-Za-z ]{3,40}";
+        if (!name.matches(Name_Pattern)) {//matching the input with the regular expression
+            addMessage.setTextFill(Color.RED);
+            if (name.length() > 40 || name.length() < 3) {//checks what error the user madde
+                addMessage.setText("your name should be 3 to 40 characters!!");
+            } else {
+                addMessage.setText("please just enter english characters only!!");
+            }
+            return false;
+        }
+        return true;
+    }// end of checkName method
 
-    }
+    public static boolean checkDate(String date) {
+        // constructin the regular expression to check the format and valditiy of the input with it
+        if (date.equals("")) { //matching the input with the regular expression
+            addMessage.setTextFill(Color.RED);
+            addMessage.setText("please enter a valid date!!");
+            return false;
+        }
+        return true;
+    }// end of checkDate method
 
     public static void search(String fullName) throws SQLException, IOException {
         // cunstructing the query and connect to the database
@@ -90,43 +113,6 @@ public class Methods {
         connection.close();
 
     }// end of search Method
-
-    public static boolean checkName(String name) {
-        // constructin the regular expression to check the format and valditiy of the input with it
-        String Name_Pattern = "[A-Za-z ]{3,40}";
-
-        if (!name.matches(Name_Pattern)) {//matching the input with the regular expression
-            addMessage.setTextFill(Color.RED);
-            if (name.length() > 40 || name.length() < 3) {//checks what error the user madde
-                addMessage.setText("your name should be 3 to 40 characters!!");
-            } else {
-                addMessage.setText("please just enter english characters only!!");
-            }
-            return false;
-        }
-        return true;
-    }// end of checkName method
-
-    public static boolean checkDate(String date) {
-        // constructin the regular expression to check the format and valditiy of the input with it
-        if (date.equals("")) { //matching the input with the regular expression
-            addMessage.setTextFill(Color.RED);
-            addMessage.setText("please enter a valid date!!");
-            return false;
-        }
-        return true;
-    }// end of checkDate method
-
-    public static boolean readGPA(String GPA) {
-        // constructin the regular expression to check the format and valditiy of the input with it
-        Double doubleGPA = Double.parseDouble(GPA);
-        if (doubleGPA < 0 || doubleGPA > 4) { //matching the input with the regular expression
-            addMessage.setTextFill(Color.RED);
-            addMessage.setText("please enter GPA in numbers between 0.00 to 4.00 !!");
-            return false;
-        }
-        return true;
-    }// end of readGPA method
 
     public static void passName(String input) {
         try {

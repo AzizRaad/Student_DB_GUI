@@ -32,6 +32,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -44,7 +45,7 @@ public class APProject_2 extends Application {
     TextField search;
     String input = "";
     Slider slider;
-    TextField txt1 = new TextField();
+    TextField nameTxtField = new TextField();
     DatePicker d = new DatePicker();
     static Label addMessage;
     static Label searchMessage;
@@ -57,24 +58,29 @@ public class APProject_2 extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // DEFINING COMPONENTS -----------------------------------------------------------------------------------------
+        // DEFINING COMPONENTS FOR TAB 1 -----------------------------------------------------------------------------------------
         TabPane tab = new TabPane();
 
         Tab tb1 = new Tab("add record");
         Tab tb2 = new Tab("Show all records");
 
+        BorderPane border1 = new BorderPane();
+
         VBox vb1 = new VBox(15);
         vb1.setPadding(new Insets(20));
         vb1.setAlignment(Pos.CENTER);
+        vb1.setFillWidth(true);
 
         HBox hb1 = new HBox(15);
         hb1.setAlignment(Pos.CENTER);
 
         gp.setAlignment(Pos.CENTER);
-        gp.setVgap(25);
+        gp.setVgap(30);
         gp.setHgap(25);
 
-        Label name = new Label();
+        Label tab1HeadLabel = new Label();
+
+        Label addRecordLbl = new Label("Add Student Record");
 
         Label sName = new Label("Name");
 
@@ -91,8 +97,10 @@ public class APProject_2 extends Application {
         Button exitBtn = new Button("EXIT");
 
         // CHANGING DETAILS OF COMPONENTS AND MODIFYING IT -----------------------------------------------------------------------------------------
-        name.setText("AbdulazizAlamoudi-441016500-AbdulazizBahamid-441016576");
-        name.setFont(Font.font("", FontWeight.BOLD, 16));
+        tab1HeadLabel.setText("AbdulazizAlamoudi-441016500-AbdulazizBahamid-441016576");
+        tab1HeadLabel.setFont(Font.font("", FontWeight.BOLD, 16));
+
+        addRecordLbl.setFont(Font.font("", FontWeight.BOLD, 20));
 
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
@@ -107,7 +115,7 @@ public class APProject_2 extends Application {
         tab.getTabs().add(tb1);
         tab.getTabs().add(tb2);
 
-        // ACTION FUNCTIONS
+        // ACTION FUNCTIONS FOR TAB 1
         addBtn.setOnAction(e -> {
             String dateInput;
             if (d.getValue() == null) {
@@ -115,7 +123,7 @@ public class APProject_2 extends Application {
             } else {
                 dateInput = d.getValue().toString();
             }
-            String nameInput = txt1.getText();
+            String nameInput = nameTxtField.getText();
             try {
                 if (Methods.add(nameInput, dateInput, result)) {
                     clear();
@@ -145,9 +153,11 @@ public class APProject_2 extends Application {
         });
 
         //FIRST TAB DATA
-        vb1.getChildren().add(name);
+        border1.setTop(tab1HeadLabel);
+        border1.setAlignment(tab1HeadLabel, Pos.CENTER);
+        vb1.getChildren().add(addRecordLbl);
         gp.add(sName, 0, 0);
-        gp.add(txt1, 1, 0);
+        gp.add(nameTxtField, 1, 0);
         gp.add(date, 0, 1);
         gp.add(d, 1, 1);
         gp.add(gpa, 0, 2);
@@ -158,9 +168,23 @@ public class APProject_2 extends Application {
         hb1.getChildren().add(addBtn);
         hb1.getChildren().add(exitBtn);
         vb1.getChildren().add(hb1);
-        tb1.setContent(vb1);
+        border1.setCenter(vb1);
+        tb1.setContent(border1);
+        tb1.setClosable(false);
 
-        //SECOND TAB DATA
+        // DEFINING COMPONENTS FOR TAB 2
+        Text tab2HeadLabel = new Text("AbdulazizAlamoudi-441016500-AbdulazizBahamid-441016576");
+        tab2HeadLabel.setFont(Font.font("", FontWeight.BOLD, 16));
+        Label searchLabel = new Label("Search By Name:");
+        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        searchMessage = new Label("");
+        searchMessage.setFont(Font.font("", FontWeight.BOLD, 16));
+        search = new TextField();
+        search.setMaxWidth(200);
+        Button searchBtn = new Button("Search");
+        Button refreshBtn = new Button("Refresh");
+        Button exitBtn2 = new Button("Exit");
+
         TableView<Student> tableView = new TableView<Student>();
         tableView.setMaxWidth(500);
 
@@ -185,24 +209,13 @@ public class APProject_2 extends Application {
                 new PropertyValueFactory<>("GPA"));
         column4.setMinWidth(100);
 
-        Text text = new Text("Searching For Students Record");
-        text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        Label searchLabel = new Label("Search By Name:");
-        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        searchMessage = new Label("");
-        searchMessage.setFont(Font.font("", FontWeight.BOLD, 16));
-        search = new TextField();
-        search.setMaxWidth(200);
-        Button searchBtn = new Button("Search");
-        Button refreshBtn = new Button("Refresh");
-        Button exitBtn2 = new Button("Exit");
-
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
         tableView.getColumns().add(column3);
         tableView.getColumns().add(column4);
-        
-        tb2.setOnSelectionChanged(e -> {                         /////////////////////////////// EDIT ME !!!!!!!!!!!!!!!!!!!
+
+        // ACTION FUNCTIONS FOR TAB 2
+        tb2.setOnSelectionChanged(e -> {
             if (isSearched && tb2.isSelected()) {
                 input = search.getText();
                 Methods.passName(input);
@@ -227,10 +240,14 @@ public class APProject_2 extends Application {
             Platform.exit();
         });
 
+        //SECOND TAB DATA
         tableView.setItems(students);
 
-        VBox vb2 = new VBox(10);
+        BorderPane border2 = new BorderPane();
+
+        VBox vb2 = new VBox(15);
         vb2.setAlignment(Pos.CENTER);
+        vb2.setMaxWidth(600);
 
         HBox hb2 = new HBox(15);
         hb2.setAlignment(Pos.CENTER);
@@ -239,9 +256,18 @@ public class APProject_2 extends Application {
         hb2.getChildren().add(refreshBtn);
 
         vb2.setPadding(new Insets(20, 10, 20, 10));
-        vb2.getChildren().addAll(text, searchLabel, search, hb2, searchMessage, tableView, exitBtn2);
+        vb2.getChildren().add(searchLabel);
+        vb2.getChildren().add(search);
+        vb2.getChildren().add(hb2);
+        vb2.getChildren().add(searchMessage);
+        vb2.getChildren().add(tableView);
+        vb2.getChildren().add(exitBtn2);
+        border2.setTop(tab2HeadLabel);
+        border2.setAlignment(tab2HeadLabel, Pos.CENTER);
+        border2.setCenter(vb2);
 
-        tb2.setContent(vb2);
+        tb2.setContent(border2);
+        tb2.setClosable(false);
 
         // SCENE Details
         Scene scene = new Scene(tab);
@@ -254,7 +280,7 @@ public class APProject_2 extends Application {
     }
 
     public void clear() {
-        txt1.setText("");
+        nameTxtField.setText("");
         d.setValue(null);
         slider.setValue(0.0);
     }
