@@ -217,7 +217,7 @@ public class APProject_2 extends Application {
 
         // ACTION FUNCTIONS FOR TAB 2
         tb2.setOnSelectionChanged(e -> {
-            if (isSearched && tb2.isSelected()) {
+            if (tb2.isSelected()) {
                 input = search.getText();
                 Methods.passName(input);
                 clear();

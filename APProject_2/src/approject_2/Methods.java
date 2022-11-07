@@ -128,8 +128,6 @@ public class Methods {
     public static void passName(String input) {
         try {
             search(input);
-            isSearched = true;
-
         } catch (SQLException ex) {
             searchMessage.setTextFill(Color.RED);
             searchMessage.setText("there is something wrong with the database connection");
