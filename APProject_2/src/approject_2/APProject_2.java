@@ -5,6 +5,7 @@
  */
 package approject_2;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import static java.lang.Double.MAX_VALUE;
 import javafx.application.Application;
@@ -33,6 +34,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -55,6 +58,14 @@ public class APProject_2 extends Application {
     String result = "0.0";
     static boolean isSearched = false;
     static ObservableList<Student> students = FXCollections.observableArrayList();
+
+    static Image nameError = new Image("file:x.png");
+    static Image dateError = new Image("file:x2.png");
+
+    static ImageView ne = new ImageView(nameError);
+    static ImageView de = new ImageView(dateError);
+
+    static boolean imageState = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -84,6 +95,16 @@ public class APProject_2 extends Application {
         Label addRecordLbl = new Label("Add Student Record");
 
         Label sName = new Label("Name");
+
+        ne.setFitHeight(20);
+        ne.setFitWidth(20);
+        ne.setPreserveRatio(true);
+        ne.setVisible(false);
+
+        de.setFitHeight(20);
+        de.setFitWidth(20);
+        de.setPreserveRatio(true);
+        de.setVisible(false);
 
         Label date = new Label("Date");
 
@@ -121,14 +142,14 @@ public class APProject_2 extends Application {
             String dateInput;
             if (d.getValue() == null) {
                 dateInput = "";
+                de.setVisible(true);
             } else {
                 dateInput = d.getValue().toString();
             }
             String nameInput = nameTxtField.getText();
             try {
-                if (Methods.add(nameInput, dateInput, result)) {
+                if (Methods.add(nameInput, dateInput, result))
                     clear();
-                }
             } catch (SQLException ex) {
                 addMessage.setTextFill(Color.RED);
                 addMessage.setText("there is something wrong with the database connection");
@@ -159,10 +180,12 @@ public class APProject_2 extends Application {
         vb1.getChildren().add(addRecordLbl);
         gp.add(sName, 0, 0);
         gp.add(nameTxtField, 1, 0);
+        gp.add(ne, 2, 0);
         gp.add(date, 0, 1);
         gp.add(d, 1, 1);
+        gp.add(de, 2, 1);
         gp.add(gpa, 0, 2);
-        gp.add(slider, 1, 2);   
+        gp.add(slider, 1, 2);
         vb1.getChildren().add(gp);
         vb1.getChildren().add(sliderValue);
         vb1.getChildren().add(addMessage);
@@ -197,7 +220,6 @@ public class APProject_2 extends Application {
         TableColumn column2 = new TableColumn<>("Full name");
         column2.setCellValueFactory(
                 new PropertyValueFactory<>("FullName"));
-
         column2.setMinWidth(150);
 
         TableColumn column3 = new TableColumn<>("Date of birth");
@@ -224,7 +246,7 @@ public class APProject_2 extends Application {
             }
             addMessage.setText("");
         });
-        
+
         searchBtn.setOnAction(e -> {
             input = search.getText();
             Methods.passName(input);

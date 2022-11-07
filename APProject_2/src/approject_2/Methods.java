@@ -5,7 +5,10 @@
  */
 package approject_2;
 
+import static approject_2.APProject_2.imageState;
 import static approject_2.APProject_2.d;
+import static approject_2.APProject_2.ne;
+import static approject_2.APProject_2.de;
 import static approject_2.APProject_2.isSearched;
 import static approject_2.APProject_2.addMessage;
 import static approject_2.APProject_2.searchMessage;
@@ -50,16 +53,19 @@ public class Methods {
             statement.execute();
             addMessage.setTextFill(Color.GREEN);
             addMessage.setText("++info added successfully++");
-
             // closing the opened connections
             statement.close();
             connection.close();
             return true;
-        } else {
+        } else if(!(checkName(fullName) || checkDate(date))){
+            addMessage.setTextFill(Color.RED);
+            addMessage.setText("INVALID INPUT !");
+            return false;
+        }else {
             return false;
         }
     }// end of add method
-    
+
     public static boolean checkName(String name) {
         // constructin the regular expression to check the format and valditiy of the input with it
         String Name_Pattern = "[A-Za-z ]{3,40}";
@@ -67,27 +73,33 @@ public class Methods {
             addMessage.setTextFill(Color.RED);
             if (name.length() > 40 || name.length() < 3) {//checks what error the user madde
                 addMessage.setText("your name should be 3 to 40 characters!!");
+                ne.setVisible(true);
             } else {
                 addMessage.setText("please just enter english characters only!!");
+                ne.setVisible(true);
             }
             return false;
         }
+        ne.setVisible(false);
         return true;
     }// end of checkName method
 
     public static boolean checkDate(String date) {
         // constructin the regular expression to check the format and valditiy of the input with it
-        if (date.equals("")) { //matching the input with the regular expression
+        if (date.equals("")) {
             addMessage.setTextFill(Color.RED);
             addMessage.setText("please enter a valid date!!");
+            de.setVisible(true);
             return false;
-        }
-        else if (d.getValue().isAfter(LocalDate.now())){
+        } else if (d.getValue().isAfter(LocalDate.now())) {
             addMessage.setTextFill(Color.RED);
             addMessage.setText("Cannot add future date");
+            de.setVisible(true);
             return false;
-        }else
-        return true;
+        } else {
+            de.setVisible(false);
+            return true;
+        }
     }// end of checkDate method
 
     public static void search(String fullName) throws SQLException, IOException {
@@ -104,9 +116,9 @@ public class Methods {
         // handling not found records exception
         if (searchResult.isBeforeFirst()) { //checks if there is records returned
             while (searchResult.next()) {
-                students.add(new Student(searchResult.getInt(1), 
+                students.add(new Student(searchResult.getInt(1),
                         searchResult.getString(2),
-                        searchResult.getString(3), 
+                        searchResult.getString(3),
                         searchResult.getDouble(4)));
             }
             searchMessage.setTextFill(Color.GREEN);
